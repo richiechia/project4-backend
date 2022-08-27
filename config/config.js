@@ -1,9 +1,14 @@
-module.exports = {
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+console.log(process.env.POSTGRES_HOST);
+const config = {
   development: {
-    username: '<YOUR_USER_NAME>',
-    password: null,
-    database: '<YOUR_APP_NAME>_development',
-    host: '127.0.0.1',
+    username: process.env.POSTGRES_USERNAME,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DATABASE,
+    host: process.env.POSTGRES_HOST,
     dialect: 'postgres',
   },
   production: {
@@ -11,10 +16,13 @@ module.exports = {
     dialect: 'postgres',
     protocol: 'postgres',
     dialectOptions: {
-      ssl: { // https://github.com/sequelize/sequelize/issues/12083
+      ssl: {
+        // https://github.com/sequelize/sequelize/issues/12083
         require: true,
         rejectUnauthorized: false,
       },
     },
   },
 };
+
+export default config;

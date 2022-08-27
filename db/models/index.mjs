@@ -1,6 +1,9 @@
 import { Sequelize } from 'sequelize';
 import url from 'url';
-import allConfig from '../config/config.js';
+import allConfig from '../../config/config.js';
+
+import memberDetailModel from './memberdetails.mjs';
+import userAccountModel from './useraccounts.mjs';
 
 const env = process.env.NODE_ENV || 'development';
 const config = allConfig[env];
@@ -27,6 +30,12 @@ if (env === 'production') {
 else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
+
+db.memberDetail = memberDetailModel(sequelize, Sequelize.DataTypes);
+db.userAccount = userAccountModel(sequelize, Sequelize.DataTypes);
+
+db.memberDetail.belongsToMany(db.userAccount, { through: 'useraccounts_memberdetails' });
+db.userAccount.belongsToMany(db.memberDetail, { through: 'useraccounts_memberdetails' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
