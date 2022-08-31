@@ -15,27 +15,54 @@ class MemberDetailsController {
     }
   }
 
+  getCurrentUser = async (request, response, next) => {
+    
+    try {
+      response.status(200).json({
+        message: "success",
+        data : ["lol"],
+        cookies : [request.cookies.user]
+      }) 
+      } catch (error) {
+        console.error(error)
+    }
+  }
+
   addMember = async (request, response, next) => {
 
     const { member } = request.body
     const { name, dob, age, email, gender} = member
 
     // Feeder
-    const username = 'richiechi'
+    const username = request.cookies.user
 
-    const userFound = await this.db.userAccount.findOne({ where: {username: username}})
-
-    // const useraccounts_memberdetails = await userFound.createUserAccount({
-    //   name : name,
-    //   dob: dob,
-    //   age : age,
-    //   email: email,
-    //   gender: gender,
-    // })
     try {
+      
+      const userFound = await this.db.userAccount.findOne({ where: {username: username}})
+
+      userFound.addMemberdetail({
+        name : name,
+        dob: dob,
+        age: age,
+        email: email,
+        gender: gender,
+        
+      })
+      const memberCreate = await this.db.memberDetail.create({
+      name: name,
+      })
+
+
+      const result = await this.db.userAccountMemberDetail.create({
+        useraccount_id : userFound.id,
+        memberdetail_id: memberCreate.id,
+      })
+
+      // console.log(result)
+
       response.status(200).json({
         message : "success",
-        data : [member]
+        data : [request.cookies]
         
       })
       

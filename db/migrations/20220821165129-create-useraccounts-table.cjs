@@ -82,7 +82,7 @@ module.exports = {
           key: 'id',
         },
       },
-      memberdetails_id: {
+      memberdetail_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {

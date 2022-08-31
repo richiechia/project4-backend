@@ -4,6 +4,7 @@ import allConfig from '../../config/config.js';
 
 import memberDetailModel from './memberdetails.mjs';
 import userAccountModel from './useraccounts.mjs';
+import userAccountMemberDetailModel from './useraccounts_memberdetails.mjs';
 
 const env = process.env.NODE_ENV || 'development';
 const config = allConfig[env];
@@ -33,9 +34,10 @@ else {
 
 db.memberDetail = memberDetailModel(sequelize, Sequelize.DataTypes);
 db.userAccount = userAccountModel(sequelize, Sequelize.DataTypes);
+db.userAccountMemberDetail = userAccountMemberDetailModel(sequelize, Sequelize.DataTypes);
 
-db.memberDetail.belongsToMany(db.userAccount, { through: 'useraccounts_memberdetails' });
-db.userAccount.belongsToMany(db.memberDetail, { through: 'useraccounts_memberdetails' });
+db.memberDetail.belongsToMany(db.userAccount, { through: db.userAccountMemberDetail });
+db.userAccount.belongsToMany(db.memberDetail, { through: db.userAccountMemberDetail });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
