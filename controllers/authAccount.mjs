@@ -36,7 +36,7 @@ class AuthController {
       if (userFound !== null) response.cookie('isLoggedIn', true);
       response.status(200).json({
         success: true,
-        data: { msg: 'Nice' },
+        data: { firstName: 'richie', lastName : 'chia' },
       });
     } catch (err) {
       next(err);
